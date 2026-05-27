@@ -33876,6 +33876,7 @@ export type GetConnectorFilesResponses = {
             processingStatus: string;
             processingError: string | null;
             embeddingStatus: 'pending' | 'processing' | 'completed' | 'failed';
+            embeddingError: string | null;
         }>;
         pagination: {
             currentPage: number;
@@ -34161,6 +34162,7 @@ export type GetConnectorFileResponses = {
         processingStatus: string;
         processingError: string | null;
         embeddingStatus: 'pending' | 'processing' | 'completed' | 'failed';
+        embeddingError: string | null;
     };
 };
 

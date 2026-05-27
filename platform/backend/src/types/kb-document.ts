@@ -37,6 +37,7 @@ export type KbDocumentMetadata = z.infer<typeof KbDocumentMetadataSchema>;
 // Shared field overrides for drizzle-zod schema generation
 const extendedFields = {
   embeddingStatus: EmbeddingStatusSchema,
+  embeddingError: z.string().nullable(),
   acl: z.array(AclEntrySchema),
   metadata: KbDocumentMetadataSchema.nullable(),
 };
@@ -50,6 +51,7 @@ export const InsertKbDocumentSchema = createInsertSchema(
   {
     ...extendedFields,
     embeddingStatus: EmbeddingStatusSchema.optional(),
+    embeddingError: z.string().nullable().optional(),
     acl: z.array(AclEntrySchema).optional(),
     metadata: KbDocumentMetadataSchema.optional(),
   },
@@ -58,6 +60,7 @@ export const UpdateKbDocumentSchema = createUpdateSchema(
   schema.kbDocumentsTable,
   {
     embeddingStatus: EmbeddingStatusSchema.optional(),
+    embeddingError: z.string().nullable().optional(),
     acl: z.array(AclEntrySchema).optional(),
     metadata: KbDocumentMetadataSchema.optional(),
   },
@@ -69,6 +72,7 @@ export const UpdateKbDocumentSchema = createUpdateSchema(
   acl: true,
   metadata: true,
   embeddingStatus: true,
+  embeddingError: true,
   chunkCount: true,
 });
 

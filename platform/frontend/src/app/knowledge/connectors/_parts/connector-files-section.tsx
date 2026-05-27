@@ -37,10 +37,12 @@ function FileStatusBadge({
   processingStatus,
   embeddingStatus,
   processingError,
+  embeddingError,
 }: {
   processingStatus?: string;
   embeddingStatus: string;
   processingError?: string | null;
+  embeddingError?: string | null;
 }) {
   if (processingStatus && processingStatus !== "completed") {
     const variants = {
@@ -95,18 +97,29 @@ function FileStatusBadge({
     failed: "Failed",
   };
 
-  return (
+  const variant =
+    variants[embeddingStatus as keyof typeof variants] ?? "secondary";
+  const label =
+    labels[embeddingStatus as keyof typeof labels] ?? embeddingStatus;
+  const badge = (
     <Badge
-      variant={
-        variants[embeddingStatus as keyof typeof variants] ?? "secondary"
-      }
-      className="capitalize text-xs"
+      variant={variant}
+      className={`capitalize text-xs ${embeddingStatus === "failed" ? "cursor-help" : ""}`}
     >
       {embeddingStatus === "processing" && (
         <Loader2 className="h-3 w-3 mr-1 animate-spin" />
       )}
-      {labels[embeddingStatus as keyof typeof labels] ?? embeddingStatus}
+      {label}
     </Badge>
+  );
+
+  if (embeddingStatus !== "failed") return badge;
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>{badge}</TooltipTrigger>
+      <TooltipContent>{embeddingError ?? "Indexing failed"}</TooltipContent>
+    </Tooltip>
   );
 }
 
@@ -125,6 +138,7 @@ function FileStatusCell({
       processingStatus={current.processingStatus}
       embeddingStatus={current.embeddingStatus}
       processingError={current.processingError}
+      embeddingError={current.embeddingError}
     />
   );
 }
